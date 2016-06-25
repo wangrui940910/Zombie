@@ -5,12 +5,14 @@ using GDGeek;
 public class WeFighter : MonoBehaviour {
 
 	public Body _body;
+	public void hit(Collider other){
+		Debug.Log ("hhittt!!");
+	}
 
 
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.Space)) {
-
 			_body.post ("attack");
 		//	_body.fsm_.post ("attack");
 		}

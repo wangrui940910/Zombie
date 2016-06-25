@@ -6,7 +6,9 @@ public class FoeFighter : MonoBehaviour {
 
 	public Body _body;
 
-
+	public void hit(Collider other){
+		_body.post ("hit");
+	}
 	// Update is called once per frame
 	void Update () {
 		return;
