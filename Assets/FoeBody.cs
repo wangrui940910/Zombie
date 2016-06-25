@@ -2,7 +2,7 @@
 using System.Collections;
 using GDGeek;
 
-public class Body : MonoBehaviour {
+public class FoeBody : MonoBehaviour {
 
 	public Animator _animator = null;
 
@@ -38,11 +38,11 @@ public class Body : MonoBehaviour {
 			});
 			Task task = new Task();
 			TaskManager.PushFront(task, delegate() {
-				
+
 			});
 			task.isOver = delegate() {
 				var info = _animator.GetCurrentAnimatorStateInfo(0);
-		
+
 				if(!info.IsName("attack")){
 					return true;
 				}else{
@@ -113,7 +113,7 @@ public class Body : MonoBehaviour {
 				this._animator.Play("magic");
 			});
 			Task task = new Task();
-		
+
 			task.isOver = delegate() {
 				var info = _animator.GetCurrentAnimatorStateInfo(0);
 
@@ -181,7 +181,7 @@ public class Body : MonoBehaviour {
 
 		return tt;
 	}
-	 
+
 	private Vector3 position_ = Vector3.zero;
 	private State getHit(){
 		StateWithEventMap swie = TaskState.Create (delegate() {
@@ -211,7 +211,7 @@ public class Body : MonoBehaviour {
 
 		});
 		return swie;
-	
+
 	}
 	void Start () {
 
@@ -219,8 +219,8 @@ public class Body : MonoBehaviour {
 		fsm_.addState ("idle", getIdle ());
 		fsm_.addState ("attack", getAttack ());
 		fsm_.addState ("skill", getSkill ());
-	//	fsm_.addState ("hit", getHit ());
-			
+		//	fsm_.addState ("hit", getHit ());
+
 		fsm_.addState ("magic", getMagic());
 		fsm_.addState ("power", getPower());
 		fsm_.addState ("def", getDef());
