@@ -3,22 +3,30 @@ using System.Collections;
 using GDGeek;
 
 public class GameManager : MonoBehaviour {
+
+
 	private FSM fsm_ = new FSM ();
 	public WeFighter _we = null;
 	public FoeFighter _foe = null;
-	private State getBegin(){
+
+	public Outside _out = null;
+	public Inside _in = null;
+	private State getOutside(){
 		StateWithEventMap swem = TaskState.Create(delegate {
-			return new Task();
-		}, this.fsm_, "fighting");
+			Task o = _out.run();
+
+			return o; 
+		}, this.fsm_, "in");
 
 
 		return swem;
 	}
-	private State getFighting(){
-		StateWithEventMap swem = new StateWithEventMap ();
-		swem.onStart += delegate {
-			Debug.Log("asdfasdfasdfsdfsdf");	
-		};
+	private State getInside(){
+		StateWithEventMap swem = TaskState.Create(delegate {
+			Task o = _in.run();
+
+			return o; 
+		}, this.fsm_, "out");
 
 
 		return swem;
@@ -26,10 +34,9 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		fsm_.addState ("begin", getBegin());
-		fsm_.addState ("fighting", getFighting ());
-
-		fsm_.init ("begin");
+		fsm_.addState ("out", getOutside());
+		fsm_.addState ("in", getInside ());
+		fsm_.init ("out");
 	}
 	
 
