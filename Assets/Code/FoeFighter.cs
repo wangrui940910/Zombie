@@ -4,6 +4,6 @@ using GDGeek;
 
 public class FoeFighter : MonoBehaviour {
 
-	public FoeBody _body;
+	//public FoeBody _body;
 
 }

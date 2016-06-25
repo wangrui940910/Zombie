@@ -16,7 +16,18 @@ public class Lamp : MonoBehaviour {
 	}
 	public Body _we = null;
 	public FoeBody _foe = null;
+	public FoeBody _foe1 = null;
+	public FoeBody _foe2 = null;
 	public void reset(){
+		if (Random.Range (0, 100) % 2 == 0) {
+			_foe1.gameObject.SetActive (true);
+			_foe = _foe1;
+			_foe2.gameObject.SetActive (false);
+		}else{
+			_foe2.gameObject.SetActive (true);
+			_foe = _foe2;
+			_foe1.gameObject.SetActive (false);
+		}
 		isRun_ = true;
 		atime_ = 0f;
 		stime_ = 0f;
