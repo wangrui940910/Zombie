@@ -110,7 +110,7 @@ public class Lamp : MonoBehaviour {
 			atime_ = 0f;
 			isRun_ = false;
 		});
-		tl.push (_we.moveTask (getGood() * 0.2f));
+		tl.push (_we.moveTask (0.3f));
 		tl.push (_we.action ("attack"));
 		tl.push (_we.resetTask ());
 		return tl;
