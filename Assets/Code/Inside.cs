@@ -7,6 +7,7 @@ public class Inside : MonoBehaviour {
 	public Camera _camera = null;
 	public Lamp _lamp = null;
 	public GameLost _lost = null;
+	public Body _we;
 	private bool isWeakup_ = false;
 	public int _winNum = 2;
 	private int num_ = 0;
@@ -40,6 +41,7 @@ public class Inside : MonoBehaviour {
 		var weakup = new StateWithEventMap ();
 		weakup.onStart += delegate {
 			isWeakup_ = true;
+			_we.reset();
 			Debug.Log("weakup");
 		};
 

@@ -157,9 +157,9 @@ public class Body : MonoBehaviour {
 		this._animator.Play ("idle");
 
 	}
-	public  Task moveTask(float v){
+	public  Task moveTask(float v, float time = 0.1f){
 		TweenTask tt = new TweenTask(delegate() {
-			return TweenWorldPosition.Begin(this.gameObject, 0.1f, _fromPoint.transform.position * (1f-v) + _attackPoint.transform.position*v);	
+			return TweenWorldPosition.Begin(this.gameObject, time, _fromPoint.transform.position * (1f-v) + _attackPoint.transform.position*v);	
 		});
 
 		return tt;

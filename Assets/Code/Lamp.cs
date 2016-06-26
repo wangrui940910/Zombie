@@ -6,7 +6,7 @@ public class Lamp : MonoBehaviour {
 	public GameLamp _shit = null;
 	public GameLamp _fire = null;
 	private bool isRun_ = false;
-
+	public GameCamera _camera;
 	private float _shitTime = 0.5f;
 	private float _fireTime = 0.3f;
 	private float atime_ = 0f;
@@ -19,6 +19,7 @@ public class Lamp : MonoBehaviour {
 	public FoeBody _foe1 = null;
 	public FoeBody _foe2 = null;
 	public void reset(){
+		Debug.Log ("aaaa");
 		if (Random.Range (0, 100) % 2 == 0) {
 			_foe1.gameObject.SetActive (true);
 			_foe = _foe1;
@@ -32,11 +33,13 @@ public class Lamp : MonoBehaviour {
 		atime_ = 0f;
 		stime_ = 0f;
 		_foe._animator.Play ("shit");
+
 	}
 	public void begin(){
 		isRun_ = true;
 		//time_ = 0f;
 	}
+	private bool isOver_ = true;
 	public Task winTask(){
 		TaskList tl = new TaskList ();
 	
@@ -44,6 +47,8 @@ public class Lamp : MonoBehaviour {
 		TaskManager.PushBack (tl, delegate {
 			isRun_ = true;
 			Time.timeScale = 1.0f;	
+			_camera.reset();
+
 		});
 
 		TaskManager.PushFront (tl, delegate {
@@ -51,6 +56,7 @@ public class Lamp : MonoBehaviour {
 			atime_ = 0f;
 			isRun_ = false;
 		});
+		tl.push (_camera.win ());
 		tl.push (_we.moveTask (1));
 		TaskSet ts = new TaskSet ();
 		ts.push (_we.action ("skill"));
@@ -61,8 +67,15 @@ public class Lamp : MonoBehaviour {
 		ttl.push (_foe.action ("hit"));
 		ts.push (ttl);
 		tl.push (ts);
-		tl.push (_we.resetTask ());
+		//tl.push (_we.resetTask ());
 		ttl.push (_foe.action ("die", false));
+		Task check = new TaskCheck (delegate() {
+			return isOver_; 
+		});
+		TaskManager.PushFront (check, delegate() {
+			isOver_ = false;
+		});
+		tl.push (check);
 		return tl;
 	}
 	public bool isGood(){
@@ -131,6 +144,9 @@ public class Lamp : MonoBehaviour {
 			atime_ += Time.deltaTime;
 			_shit.light (Mathf.FloorToInt(stime_/_shitTime)%6);
 			_fire.light (Mathf.FloorToInt(atime_/_fireTime)%4);
+		}
+		if (Input.GetKey (KeyCode.Space)) {
+			isOver_ = true;
 		}
 	}
 }
