@@ -11,18 +11,11 @@ public class GameCamera : MonoBehaviour {
 	}
 	public Task lost(){
 		TweenTask tt = new TweenTask (delegate {
-			Debug.Log("!!!!!");
-			return TweenValue.Begin(this.gameObject,1.0f,0,1,this.gameObject,"lostrun");
+			return TweenValue.Begin(this.gameObject,1.0f, 0, 1,this.gameObject,"lostrun");
 		});
 		return tt;
 	}
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	public void reset(){
+		lostrun (0);
 	}
 }

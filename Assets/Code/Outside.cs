@@ -65,7 +65,7 @@ public class Outside : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		fsm_.addState ("sleep", getSleep());
 		fsm_.addState ("weakup", getWeakup());
 		fsm_.addState ("wait", getWait(), "weakup");

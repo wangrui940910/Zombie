@@ -152,6 +152,11 @@ public class Body : MonoBehaviour {
 
 		return tt;
 	}
+	public void reset(){
+		this.gameObject.transform.position = _fromPoint.transform.position;
+		this._animator.Play ("idle");
+
+	}
 	public  Task moveTask(float v){
 		TweenTask tt = new TweenTask(delegate() {
 			return TweenWorldPosition.Begin(this.gameObject, 0.1f, _fromPoint.transform.position * (1f-v) + _attackPoint.transform.position*v);	

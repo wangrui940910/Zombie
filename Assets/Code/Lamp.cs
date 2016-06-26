@@ -39,12 +39,15 @@ public class Lamp : MonoBehaviour {
 	}
 	public Task winTask(){
 		TaskList tl = new TaskList ();
+	
 
 		TaskManager.PushBack (tl, delegate {
 			isRun_ = true;
+			Time.timeScale = 1.0f;	
 		});
 
 		TaskManager.PushFront (tl, delegate {
+			Time.timeScale = 0.3f;	
 			atime_ = 0f;
 			isRun_ = false;
 		});
