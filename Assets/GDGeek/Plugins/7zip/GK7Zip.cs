@@ -24,6 +24,18 @@ public class GK7Zip {
 
 	public static string GetPath(){
 		return  Application.streamingAssetsPath + "/";
+		string path = "";
+		#if UNITY_EDITOR
+		path = Application.dataPath +"/StreamingAssets"+"/";
+
+		#elif UNITY_IPHONE
+		path = Application.dataPath +"/Raw"+"/";
+
+		#elif UNITY_ANDROID
+		path = "jar:file://" + Application.dataPath + "!/assets/"+"/;
+
+		#endif
+		return path;
 	}
 	public  static string GetFileName (string key){
 		return  GetPath () + key + ".zip";

@@ -5,9 +5,14 @@ using GDGeek;
 public class Lamp : MonoBehaviour {
 	public GameLamp _shit = null;
 	public GameLamp _fire = null;
+	public AudioSource _doshit;
+	public Txwx _txwx = null;
 	private bool isRun_ = false;
+	public AudioSource _win;
+	public AudioSource _shu;
+	public AudioSource _cool;
 	public GameCamera _camera;
-	private float _shitTime = 0.5f;
+	private float _shitTime = 0.75f;
 	private float _fireTime = 0.3f;
 	private float atime_ = 0f;
 	private float stime_ = 0f;
@@ -40,7 +45,9 @@ public class Lamp : MonoBehaviour {
 		//time_ = 0f;
 	}
 	private bool isOver_ = true;
+	public AudioSource _bei;
 	public Task winTask(){
+		TaskSet tset = new TaskSet ();
 		TaskList tl = new TaskList ();
 	
 
@@ -53,8 +60,10 @@ public class Lamp : MonoBehaviour {
 
 		TaskManager.PushFront (tl, delegate {
 			Time.timeScale = 0.3f;	
+			_win.Play();
 			atime_ = 0f;
 			isRun_ = false;
+
 		});
 		tl.push (_camera.win ());
 		tl.push (_we.moveTask (1));
@@ -67,16 +76,25 @@ public class Lamp : MonoBehaviour {
 		ttl.push (_foe.action ("hit"));
 		ts.push (ttl);
 		tl.push (ts);
-		//tl.push (_we.resetTask ());
+
 		ttl.push (_foe.action ("die", false));
+
 		Task check = new TaskCheck (delegate() {
 			return isOver_; 
 		});
 		TaskManager.PushFront (check, delegate() {
+			SoundEffect.instance.SmallVictorySound();
 			isOver_ = false;
 		});
+		tl.push (_txwx.show ());
 		tl.push (check);
-		return tl;
+		tset.push (tl);
+		TaskWait tw = new TaskWait (0.5f);
+		TaskManager.PushBack (tw, delegate {
+			_bei.Play();	
+		});
+		tset.push (tw);
+		return tset;
 	}
 	public bool isGood(){
 		return (Mathf.FloorToInt (atime_ / _fireTime) % 4) == 3;
@@ -91,6 +109,25 @@ public class Lamp : MonoBehaviour {
 		_fire.light (2);
 		isRun_ = true;
 	}
+	public Task attack(bool hit){
+		TaskSet ta = new TaskSet();
+		Task attack = _we.action ("attack");
+		ta.push (attack);
+		TaskWait asound = new TaskWait (0.3f);
+
+
+		TaskManager.PushBack (asound, delegate {
+			if(hit){
+
+				SoundEffect.instance.BoxingVictorySound();
+			//
+			}else{
+				SoundEffect.instance.PlayAttackSound(0.1f);
+			}
+		});
+		ta.push (asound);
+		return ta;
+	}
 	public Task good(){
 		TaskList tl = new TaskList ();
 
@@ -100,16 +137,22 @@ public class Lamp : MonoBehaviour {
 
 		TaskManager.PushFront (tl, delegate {
 			atime_ = 0f;
+			_cool.Play();
 			isRun_ = false;
 		});
 		tl.push (_we.moveTask (1));
 		TaskSet ts = new TaskSet ();
-		ts.push (_we.action ("attack"));
+
+		ts.push (attack(true));
 
 
 		TaskList ttl = new TaskList ();
 		ttl.push (new TaskWait(0.5f));
-		ttl.push (_foe.action ("hit"));
+		var hit = _foe.action ("hit");
+		TaskManager.PushFront (hit, delegate() {
+			SoundEffect.instance.PlayHitSound();
+		});
+		ttl.push (hit);
 		ts.push (ttl);
 		tl.push (ts);
 		tl.push (_we.resetTask ());
@@ -125,9 +168,10 @@ public class Lamp : MonoBehaviour {
 		TaskManager.PushFront (tl, delegate {
 			atime_ = 0f;
 			isRun_ = false;
+			_shu.Play();
 		});
 		tl.push (_we.moveTask (0.3f));
-		tl.push (_we.action ("attack"));
+		tl.push (attack(false));
 		tl.push (_we.resetTask ());
 		return tl;
 	
@@ -142,7 +186,12 @@ public class Lamp : MonoBehaviour {
 		if (isRun_) {
 			stime_ += Time.deltaTime;
 			atime_ += Time.deltaTime;
-			_shit.light (Mathf.FloorToInt(stime_/_shitTime)%6);
+			int nshit = Mathf.FloorToInt (stime_ / _shitTime) % 6;
+			if (nshit != _shit.n) {
+				_doshit.Play ();
+				_shit.light (nshit);
+			}
+
 			_fire.light (Mathf.FloorToInt(atime_/_fireTime)%4);
 		}
 		if (Input.GetKey (KeyCode.Space)) {

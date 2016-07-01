@@ -4,6 +4,7 @@ using GDGeek;
 
 public class Inside : MonoBehaviour {
 	private FSM fsm_ = new FSM ();
+	public AudioSource _dang;
 	public Camera _camera = null;
 	public Lamp _lamp = null;
 	public GameLost _lost = null;
@@ -11,6 +12,7 @@ public class Inside : MonoBehaviour {
 	private bool isWeakup_ = false;
 	public int _winNum = 2;
 	private int num_ = 0;
+	public Txwx _txwx;
 
 	public Task run(){
 		Task task = new Task ();
@@ -29,6 +31,7 @@ public class Inside : MonoBehaviour {
 		var sleep = new StateWithEventMap ();
 		sleep.addAction ("weakup", "input");
 		sleep.onStart += delegate {
+			_txwx.hide();
 			_camera.gameObject.SetActive(false);
 		};
 		sleep.onOver += delegate {
@@ -36,10 +39,12 @@ public class Inside : MonoBehaviour {
 		};
 		return sleep;
 	}
+
 	State getWeakup(){
 
 		var weakup = new StateWithEventMap ();
 		weakup.onStart += delegate {
+			
 			isWeakup_ = true;
 			_we.reset();
 			Debug.Log("weakup");
@@ -47,6 +52,7 @@ public class Inside : MonoBehaviour {
 
 		weakup.onOver += delegate {
 			isWeakup_ = false;
+			_dang.Play();
 		};
 		weakup.addAction ("sleep", "sleep");
 		//sleep.addAction ("shiting", "shiting");
@@ -59,7 +65,6 @@ public class Inside : MonoBehaviour {
 		StateWithEventMap swem = new StateWithEventMap ();
 
 		swem.onStart += delegate {
-			
 			_lamp.reset();
 		};
 		swem.addAction ("shiting", "lost");
@@ -87,7 +92,6 @@ public class Inside : MonoBehaviour {
 	}
 	State getGood(){
 		StateWithEventMap swem = TaskState.Create (delegate {
-			//Debug.Log("error");
 			return _lamp.good();
 		}, fsm_, "input");
 		swem.onStart += delegate {
@@ -97,7 +101,6 @@ public class Inside : MonoBehaviour {
 	}
 	State getError(){
 		StateWithEventMap swem = TaskState.Create (delegate {
-			//Debug.Log("error");
 			return _lamp.error();
 		}, fsm_, "input");
 		swem.onStart += delegate {
