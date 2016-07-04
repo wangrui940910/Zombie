@@ -6,11 +6,11 @@ public class GameManager : MonoBehaviour {
 
 
 	private FSM fsm_ = new FSM ();
-	public WeFighter _we = null;
-	public FoeFighter _foe = null;
 
 	public Outside _out = null;
 	public Inside _in = null;
+
+
 	private State getOutside(){
 		StateWithEventMap swem = TaskState.Create(delegate {
 			Task o = _out.run();
@@ -24,11 +24,8 @@ public class GameManager : MonoBehaviour {
 	private State getInside(){
 		StateWithEventMap swem = TaskState.Create(delegate {
 			Task o = _in.run();
-
 			return o; 
 		}, this.fsm_, "out");
-
-
 		return swem;
 	}
 	// Use this for initialization
