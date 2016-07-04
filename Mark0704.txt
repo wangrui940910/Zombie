@@ -1,0 +1,24 @@
+Task - 游戏中个体执行一个动作
+TaskManager - 封装Task操作
+	.RushFront() - Task之前执行函数
+	.PushBach() - Task之后执行函数
+TaskList - 任务列表
+TaskSet
+Task init - 初始化（开启）
+	shutdown - 关闭
+	update(时间)
+	isOver - 是否执行完毕
+
+FSM - 游戏中的人工智能，主要用来传递消息
+
+Tween - 差值动画（用程序写的动画）
+	iTweener - Unity中的Tween，差值方式多，速度较慢
+	www.itween.pixelplacement.com
+
+Voxel - 体素库
+VR - VR库
+以上两个库积累中
+
+delegate() - C#特性，仿函数
+
+State - 状态机

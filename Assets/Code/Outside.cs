@@ -57,7 +57,7 @@ public class Outside : MonoBehaviour {
 
 	State getIn(){
 		var instate = TaskState.Create (delegate() {
-			return _line.inTask();
+			return _line.inTask();  //向前走一格
 		}, fsm_, "sleep");
 		return instate;
 
