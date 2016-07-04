@@ -9,7 +9,7 @@ public class GameLine : MonoBehaviour {
 	void Start () {
 		GameObject man = null;
 		for (int i = 0; i < 50; ++i) {
-			if (Random.Range (0, 100) % 2 == 0) {
+			if (Random.Range (0, 2) == 0) {
 				man = GameObject.Instantiate(_x);
 				man.transform.parent = this.transform;
 				man.transform.localPosition = _x.transform.localPosition;
